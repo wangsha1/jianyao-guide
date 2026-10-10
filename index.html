@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>资深中药师定制：个人专属煎药指导</title>
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-light: #4caf50;
+            --bg: #f1f8e9;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --gray: #888888;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e0e0e0;
+            width: 100%;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-light);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .content {
+            padding: 40px 30px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .step {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 22px;
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        p {
+            line-height: 1.6;
+            color: #555;
+            font-size: 15px;
+        }
+
+        .highlight {
+            background: #fff3e0;
+            padding: 15px;
+            border-left: 4px solid #ff9800;
+            border-radius: 4px;
+            font-size: 14px;
+            margin: 15px 0;
+        }
+
+        .btn-group {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            min-width: 120px;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1b5e20;
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #555;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        /* 时间轴结果单样式 */
+        .timeline {
+            margin-top: 20px;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 8px;
+            width: 2px;
+            background: #c8e6c9;
+        }
+
+        .timeline-step {
+            position: relative;
+            margin-bottom: 25px;
+            background: #f9fdf9;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e8f5e9;
+        }
+
+        .timeline-step::before {
+            content: '';
+            position: absolute;
+            left: -28px;
+            top: 18px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px #c8e6c9;
+        }
+
+        .timeline-step h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        .timeline-step p {
+            margin: 0;
+            font-size: 14px;
+            color: #444;
+        }
+
+        .timer-tag {
+            display: inline-block;
+            background: #ffebee;
+            color: #c62828;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+
+        .caution {
+            color: #d32f2f;
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress"></div>
+    </div>
+    <div class="content">
+        
+        <!-- 步骤 0：准备阶段 -->
+        <div class="step active" id="step-0">
+            <h2>🍵 准备阶段</h2>
+            <p>您好！我是您的专属中药师。在开始煎药前，请做好以下准备：</p>
+            <div class="highlight">
+                <strong>1. 器具选择：</strong>首选砂锅、瓦罐、陶瓷锅。忌用铁锅、铝锅。<br>
+                <strong>2. 浸泡药材：</strong>加冷水浸泡 <b>30-60分钟</b>，水面没过药材 <b>2-3厘米</b>。
+            </div>
+            <p>准备好后，我们开始根据您的处方进行专属定制。</p>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="nextStep(1)">我已准备好，开始</button>
+            </div>
+        </div>
+
+        <!-- 步骤 1：药材类型 (新增) -->
+        <div class="step" id="step-1">
+            <h2>问题一：您的处方主要治疗什么？</h2>
+            <p>不同类型的药材，煎煮时间截然不同。请问您的药方属于哪一类？</p>
+            <div class="btn-group" style="flex-direction: column;">
+                <button class="btn-primary" onclick="setType('解表药', 2)">感冒/外感类（解表药、芳香类）</button>
+                <button class="btn-primary" onclick="setType('一般药', 2)">一般调理类（常规补益、清热等）</button>
+                <button class="btn-primary" onclick="setType('滋补药', 2)">滋补类（人参、熟地等厚重药材）</button>
+            </div>
+        </div>
+
+        <!-- 步骤 2：先煎 -->
+        <div class="step" id="step-2">
+            <h2>问题二：是否有“先煎”药？</h2>
+            <p>处方中是否有标注“先煎”的药材？（如矿石类、贝壳类、毒性药材等）</p>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="answer('先煎', true, 3)">有先煎药</button>
+                <button class="btn-secondary" onclick="answer('先煎', false, 3)">没有</button>
+            </div>
+        </div>
+
+        <!-- 步骤 3：后下 -->
+        <div class="step" id="step-3">
+            <h2>问题三：是否有“后下”药？</h2>
+            <p>处方中是否有标注“后下”的药材？（如薄荷、砂仁等芳香类、易挥发药材）</p>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="answer('后下', true, 4)">有后下药</button>
+                <button class="btn-secondary" onclick="answer('后下', false, 4)">没有</button>
+            </div>
+        </div>
+
+        <!-- 步骤 4：包煎 -->
+        <div class="step" id="step-4">
+            <h2>问题四：是否有“包煎”药？</h2>
+            <p>处方中是否有标注“包煎”的药材？（如旋覆花、车前子等带绒毛或细小种子类）</p>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="answer('包煎', true, 5)">有包煎药</button>
+                <button class="btn-secondary" onclick="answer('包煎', false, 5)">没有</button>
+            </div>
+        </div>
+
+        <!-- 步骤 5：特殊处理 -->
+        <div class="step" id="step-5">
+            <h2>问题五：是否有“另煎、烊化或冲服”药？</h2>
+            <p>处方中是否有贵重药材（人参等需另煎）、胶类（阿胶等需烊化）或粉末（三七粉等需冲服）？</p>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="answer('特殊', true, 6)">有此类药材</button>
+                <button class="btn-secondary" onclick="answer('特殊', false, 6)">没有</button>
+            </div>
+        </div>
+
+        <!-- 步骤 6：常规煎煮与结果 -->
+        <div class="step" id="step-6">
+            <h2>📋 您的专属煎药流程单</h2>
+            <p>已为您严格按照时间轴生成以下煎药步骤：</p>
+            <div class="timeline" id="result-content">
+                <!-- 动态生成时间轴内容 -->
+            </div>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="window.location.reload()">重新测试</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // 记录用户的回答状态
+    const userAnswers = {
+        type: '',
+        typeName: '',
+        先煎: false,
+        后下: false,
+        包煎: false,
+        特殊: false
+    };
+
+    // 时间配置表 (根据药材类型决定基础煎煮时间)
+    const timeConfig = {
+        '解表药': { first: '15-20分钟', second: '10-15分钟', tip: '解表药宜武火快煎，不宜久煮，否则有效成分易挥发。' },
+        '一般药': { first: '20-30分钟', second: '15-20分钟', tip: '一般调理药物，常规火候即可。' },
+        '滋补药': { first: '40-60分钟', second: '30-40分钟', tip: '滋补药宜文火慢煎，使有效成分充分溶出。' }
+    };
+
+    // 进度条控制
+    function updateProgress(step) {
+        const totalSteps = 6; // 总共6个步骤
+        const percent = (step / totalSteps) * 100;
+        document.getElementById('progress').style.width = percent + '%';
+    }
+
+    // 切换步骤
+    function nextStep(step) {
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        document.getElementById('step-' + step).classList.add('active');
+        updateProgress(step);
+
+        if (step === 6) {
+            generateResult();
+        }
+    }
+
+    // 设置药材类型
+    function setType(type, nextStepNum) {
+        userAnswers.type = type;
+        userAnswers.typeName = timeConfig[type].tip;
+        nextStep(nextStepNum);
+    }
+
+    // 记录答案并跳转
+    function answer(question, isYes, nextStepNum) {
+        userAnswers[question] = isYes;
+        nextStep(nextStepNum);
+    }
+
+    // 生成最终流程单 (严格时间轴)
+    function generateResult() {
+        let html = '';
+        const config = timeConfig[userAnswers.type];
+
+        // 1. 浸泡阶段
+        html += `
+        <div class="timeline-step">
+            <h4>第一步：浸泡药材</h4>
+            <p>将所有药材（除特殊处理外）加冷水浸泡30-60分钟。水面没过药材2-3厘米。</p>
+        </div>`;
+
+        // 2. 先煎阶段
+        if (userAnswers['先煎']) {
+            html += `
+            <div class="timeline-step">
+                <h4>第二步：先煎药处理 <span class="timer-tag">先煎 20-30 分钟</span></h4>
+                <p>将标注“先煎”的药材放入砂锅，加适量水，武火煮沸后转文火煎煮20-30分钟。<span class="caution">*毒性药材（如附子）请严格遵医嘱延长煎煮时间。</span></p>
+            </div>`;
+        }
+
+        // 3. 头煎阶段 (含包煎与后下)
+        let firstDecoctionTitle = userAnswers['先煎'] ? '第三步：头煎（群药）' : '第二步：头煎（群药）';
+        html += `
+        <div class="timeline-step">
+            <h4>${firstDecoctionTitle} <span class="timer-tag">文火煎 ${config.first}</span></h4>
+            <p>将剩余浸泡好的药材（如有包煎药，请装入纱布袋同煎）放入锅中。武火煮沸后，转文火慢煎 <b>${config.first}</b>。`;
+        
+        if (userAnswers['后下']) {
+            html += `<br><span class="caution">👉 注意：在头煎即将结束前5-10分钟，放入“后下”药材同煎。</span>`;
+        }
+        
+        html += `</p><p>煎好后，将药液倒出至容器中备用（头煎液）。</p></div>`;
+
+        // 4. 二煎阶段
+        let secondDecoctionTitle = userAnswers['先煎'] ? '第四步：二煎' : (userAnswers['后下'] || userAnswers['包煎'] ? '第四步：二煎' : '第三步：二煎');
+        // 简单顺延编号
+        if(!userAnswers['先煎'] && !userAnswers['后下'] && !userAnswers['包煎']) {
+             secondDecoctionTitle = '第三步：二煎';
+        } else if (userAnswers['先煎'] && !userAnswers['后下'] && !userAnswers['包煎']) {
+             secondDecoctionTitle = '第三步：二煎';
+        }
+
+        html += `
+        <div class="timeline-step">
+            <h4>${secondDecoctionTitle} <span class="timer-tag">文火煎 ${config.second}</span></h4>
+            <p>在药渣中重新加温水（没过药材即可），武火煮沸后转文火煎煮 <b>${config.second}</b>，倒出药液（二煎液）。</p>
+        </div>`;
+
+        // 5. 混合药液
+        html += `
+        <div class="timeline-step">
+            <h4>混合药液</h4>
+            <p>将“头煎液”和“二煎液”混合均匀。此时您得到的是两天（或按医嘱）的总药量。</p>
+        </div>`;
+
+        // 6. 特殊处理与服用 (放在最后是因为需要在服用前处理)
+        if (userAnswers['特殊']) {
+            html += `
+            <div class="timeline-step">
+                <h4>服用前：特殊药材处理</h4>
+                <p>
+                    👉 <b>另煎（贵重药）：</b>单独煎煮2-3小时，取汁兑入混合药液中。<br>
+                    👉 <b>烊化（胶类）：</b>将阿胶等打碎，放入碗中，加入少量热药液，隔水蒸化后兑入。<br>
+                    👉 <b>冲服（粉末）：</b>三七粉等粉末，直接用药液冲服即可。
+                </p>
+            </div>`;
+        }
+
+        html += `
+        <div class="timeline-step">
+            <h4>服用</h4>
+            <p>将混合好的药液分为早晚两次，温热服用。<br><span class="caution">💡 药师叮咛：${config.tip}</span></p>
+        </div>`;
+
+        document.getElementById('result-content').innerHTML = html;
+    }
+</script>
+
+</body>
+</html>
